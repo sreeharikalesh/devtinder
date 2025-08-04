@@ -5,7 +5,6 @@ const User = require('./models/user')
 const { validateSignupBody}= require('./../utils/validations')
 const bcrypt = require("bcrypt")
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const {userAuth} = require('./middlewares/auth')
 
 
@@ -54,13 +53,11 @@ app.post('/login',async(req,res)=>{
             throw new Error("invalid credentials")
         }
 
-        const isUserAuthenticated = await bcrypt.compare(password, user.password);
+        const isUserAuthenticated = user.validatePassword(password)
 
         if(isUserAuthenticated){
-            const token = jwt.sign({_id: user._id},"Sreehari@dev",{
-                expiresIn: '1d'
-            })
-            res.cookie("token",token,{ expires: new Date(Date.now() + 10)})
+            const token = user.getJWT();
+            res.cookie("token",token,{ maxAge: 24 * 60 * 60 * 1000, httpOnly: true})
             res.send("user authenticated successfully")
         }
         else{
