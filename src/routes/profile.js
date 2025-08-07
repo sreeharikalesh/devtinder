@@ -34,24 +34,12 @@ router.patch('/profile/edit',userAuth, async (req,res) => {
     }   
 })
 
-router.patch('/profile/password/edit',userAuth, async(req, res)=>{
+router.patch('/profile/password',userAuth, async(req, res)=>{
     try {
-        const {currentPassword, newPassword} = req.body
+        const { newPassword } = req.body
         const user = req.user
-
-        const isPasswordCorrect = await user.validatePassword(currentPassword)
-
-        if(!isPasswordCorrect){
-            throw new Error("password is not correct")
-        }
         
         validatePassword(newPassword)
-
-        const isSamePassword = await user.validatePassword(newPassword)
-
-        if(isSamePassword){
-            throw new Error("new password cannot be same as the old one")
-        }
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 10)
         
