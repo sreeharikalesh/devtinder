@@ -70,6 +70,13 @@ const userSchema = new Schema({
                 throw new Error("please enter a valid url")
             }
         }
+    },
+    about: {
+        type: String,
+        trim: true,
+        minlength: 10,
+        maxlength: 500,
+        default: '',
     }
     
 },
