@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const UserModel = require('../models/user')
 const bcrypt = require('bcrypt')
 const {validateSignupBody} = require('../utils/validations')
 const express = require('express')
@@ -15,7 +15,7 @@ router.post('/signup',async(req,res)=>{
         const hashedPassword = await bcrypt.hash(password, 10)
         console.log(hashedPassword);
 
-        const user = new User({
+        const user = new UserModel({
             email,
             password: hashedPassword,
             firstName,
@@ -40,7 +40,7 @@ router.post('/login',async(req,res)=>{
     try {
         const {email, password} = req.body
 
-        const user = await User.findOne({email: email})
+        const user = await UserModel.findOne({email: email})
          
         if(!user){
             throw new Error("invalid credentials")
