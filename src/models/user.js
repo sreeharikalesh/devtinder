@@ -80,7 +80,7 @@ const userSchema = new Schema({
         trim: true,
         minlength: 10,
         maxlength: 500,
-        default: '',
+        default: "this is the default about section in the application",
     }
     
 },

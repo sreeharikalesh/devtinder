@@ -33,6 +33,6 @@ connectionRequestSchema.pre('save', async function (next) {
         throw new Error("you cannot send connection request to yourself");
     }
 })
-const connectionRequestModel = mongoose.model('connectionRequest',connectionRequestSchema)
+const ConnectionRequestModel = mongoose.model('connectionRequest',connectionRequestSchema)
 
-module.exports = connectionRequestModel
+module.exports = ConnectionRequestModel
