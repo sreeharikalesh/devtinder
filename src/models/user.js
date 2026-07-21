@@ -91,7 +91,7 @@ const userSchema = new Schema({
 
 userSchema.methods.getJWT = function () {
     const user = this
-    const token = jwt.sign({_id: user._id},"REDACTED_JWT_SECRET",{
+    const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET, {
         expiresIn: '1d'
     })
     
