@@ -106,6 +106,12 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
     return isPasswordValid
 }
 
+userSchema.methods.toJSON = function () {
+    const user = this.toObject()
+    delete user.password
+    return user
+}
+
 const UserModel = mongoose.model('User', userSchema);
 
 module.exports = UserModel  

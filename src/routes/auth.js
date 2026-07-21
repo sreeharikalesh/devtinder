@@ -46,14 +46,14 @@ router.post('/login',async(req,res)=>{
             throw new Error("invalid credentials")
         }
 
-        const isUserAuthenticated = user.validatePassword(password)
+        const isUserAuthenticated = await user.validatePassword(password)
 
         if(isUserAuthenticated){
             const token = user.getJWT();
             res.cookie("token",token,{ maxAge: 24 * 60 * 60 * 1000, httpOnly: true})
-            res.send("user authenticated successfully")
+            res.send(user)
         }
-        else{
+        else{ 
             throw new Error("invalid credentials")
         }
 
@@ -63,9 +63,7 @@ router.post('/login',async(req,res)=>{
 })
 
 router.post('/logout',(req, res)=>{
-    res.cookie("token", null,{
-        expire: Date.now()
-    })
+    res.clearCookie("token")
 
     res.send("user logged out successfully")
 })

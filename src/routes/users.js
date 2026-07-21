@@ -1,8 +1,36 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequestModel = require("../models/connectionRequest");
+const UserModel = require("../models/user");
 
 const router = express.Router();
+
+const FEED_USER_FIELDS = "firstName lastName age gender about skills photoUrl";
+
+router.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequestModel.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId toUserId");
+
+    const hideUsersFromFeed = new Set();
+    hideUsersFromFeed.add(loggedInUser._id.toString());
+    connectionRequests.forEach((request) => {
+      hideUsersFromFeed.add(request.fromUserId.toString());
+      hideUsersFromFeed.add(request.toUserId.toString());
+    });
+
+    const users = await UserModel.find({
+      _id: { $nin: Array.from(hideUsersFromFeed) },
+    }).select(FEED_USER_FIELDS);
+
+    res.json(users);
+  } catch (error) {
+    res.status(400).send("ERROR: " + error.message);
+  }
+});
 
 router.get("/user/requests/received", userAuth, async (req, res) => {
   try {
