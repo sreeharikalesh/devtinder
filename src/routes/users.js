@@ -43,7 +43,7 @@ router.get("/user/requests/received", userAuth, async (req, res) => {
       "firstName",
       "lastName",
       "skills",
-      "photo",
+      "photoUrl",
       "about",
     ]);
 
@@ -67,13 +67,13 @@ router.get('/user/connections',userAuth, async (req, res) => {
             "firstName",
             "lastName",
             "skills",
-            "photo",
+            "photoUrl",
             "about",
         ]).populate("toUserId", [
             "firstName",
             "lastName",
             "skills",
-            "photo",
+            "photoUrl",
             "about",
         ])
 

@@ -13,7 +13,6 @@ router.post('/signup',async(req,res)=>{
         const {email, password, firstName, lastName}= req.body
 
         const hashedPassword = await bcrypt.hash(password, 10)
-        console.log(hashedPassword);
 
         const user = new UserModel({
             email,
@@ -22,7 +21,10 @@ router.post('/signup',async(req,res)=>{
             lastName
         })
         await user.save();
-        res.send("user saved successfully")
+
+        const token = user.getJWT();
+        res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true})
+        res.json(user)
     } catch (error) {
          if (error.code === 11000) {
             // Send a more specific, user-friendly error message
