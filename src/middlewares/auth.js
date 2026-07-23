@@ -10,7 +10,7 @@ const userAuth = async (req, res, next)=>{
             throw new Error("invalid token");
         }
 
-        const decodedObj = jwt.verify(token, process.env.JWT_SECRET)
+        const decodedObj = jwt.verify(token, 'da9ea8e99224c1d401032776fe881a0523444b1bc9fcda8b1a6ba4467c942089dbb22b74035b16b6453b40cf6f2bd77b')
         console.log(decodedObj);
 
         let {_id} = decodedObj;
